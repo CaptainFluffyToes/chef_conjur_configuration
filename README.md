@@ -1,2 +1,4 @@
 # conjur_configuration
-Chef cookbook for setting up Conjur
+
+TODO: Enter the cookbook description here.
+
