@@ -4,7 +4,7 @@ maintainer_email 'djkhan85@gmail.com'
 license 'GPL-3.0'
 description 'Installs/Configures conjur_configuration'
 long_description 'Installs/Configures conjur_configuration'
-version '0.1.3'
+version '0.1.4'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 
 # The `issues_url` points to the location where issues for this cookbook are
@@ -19,9 +19,10 @@ chef_version '>= 12.1' if respond_to?(:chef_version)
 #
 # source_url 'https://github.com/CaptainFullyToes/conjur_configuration'
 
-#Changelog
-#[10/16/2017] - 0.1.1 - Added dependencies and .chef folder for berks uploads.  
-#[10/16/2017] - 0.1.2 - added images and containers for docker install.
-#[10/18/2017] - 0.1.3 - created loops for multi item resources. 
+# Changelog
+# [10/16/2017] - 0.1.1 - Added dependencies and .chef folder for berks uploads.  
+# [10/16/2017] - 0.1.2 - added images and containers for docker install.
+# [10/18/2017] - 0.1.3 - created loops for multi item resources.
+# [10/30/2017] - 0.1.4 - Added new command for generating the datakey
 
 depends 'docker_configuration'
