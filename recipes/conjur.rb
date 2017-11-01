@@ -47,7 +47,6 @@ docker_container 'conjur' do
   action :nothing
 end
 
-# ACCOUNT_API = `docker exec conjur-master conjurctl account create #{ACCOUNT_NAME} | awk '/admin:/{print $5}'`
 ruby_block 'Generate_API_Key' do
   block do
     node.default['conjur']['account_api'] = `docker exec conjur-master conjurctl account create #{ACCOUNT_NAME}`
