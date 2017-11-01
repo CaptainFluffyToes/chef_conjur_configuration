@@ -13,7 +13,7 @@ images.each do |image|
   end
 end
 
-CONJUR_NETWORK = 'conjur'
+CONJUR_NETWORK = 'pipeline'
 CONJUR_NAME = 'conjur-master'
 ACCOUNT_NAME = 'ConUser'
 
