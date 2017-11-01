@@ -15,13 +15,13 @@ end
 
 CONJUR_NETWORK = 'conjur'
 CONJUR_NAME = 'conjur-master'
-# DATAKEY = `docker container run --rm cyberark/conjur data-key generate`
 ACCOUNT_NAME = 'ConUser'
 
 ruby_block 'Generate_data_Key' do
   block do
     node.default['conjur']['data_key'] = `docker container run --rm cyberark/conjur data-key generate`
   end
+  notifies :run, 'docker_container[conjur]', :delayed
   action :run
 end
 
@@ -42,8 +42,9 @@ docker_container 'conjur' do
   repo 'cyberark/conjur'
   command 'server'
   port '3000:3000'
-  env ['DATABASE_URL=postgres://postgres@database/postgres', "CONJUR_DATA_KEY=#{node['conjur']['data_key']}"]
-  action :run
+  env lazy { ['DATABASE_URL=postgres://postgres@database/postgres', "CONJUR_DATA_KEY=#{node['conjur']['data_key']}"] }
+  notifies :run, 'ruby_block[Generate_API_Key]', :immediate
+  action :nothing
 end
 
 # ACCOUNT_API = `docker exec conjur-master conjurctl account create #{ACCOUNT_NAME} | awk '/admin:/{print $5}'`
@@ -52,7 +53,7 @@ ruby_block 'Generate_API_Key' do
     node.default['conjur']['account_api'] = `docker exec conjur-master conjurctl account create #{ACCOUNT_NAME}`
   end
   notifies :run, 'docker_container[cli]', :delayed
-  action :run
+  action :nothing
 end
 
 docker_container 'cli' do
@@ -61,6 +62,6 @@ docker_container 'cli' do
   repo 'conjurinc/cli5'
   command 'infinity'
   entrypoint 'sleep'
-  env ["CONJUR_APPLIANCE_URL=http://#{CONJUR_NAME}", "CONJUR_ACCOUNT=#{ACCOUNT_NAME}", "CONJUR_AUTHN_API_KEY=#{node['conjur']['account_api']}", 'CONJUR_AUTHN_LOGIN=admin']
+  env lazy { ["CONJUR_APPLIANCE_URL=http://#{CONJUR_NAME}", "CONJUR_ACCOUNT=#{ACCOUNT_NAME}", "CONJUR_AUTHN_API_KEY=#{node['conjur']['account_api']}", 'CONJUR_AUTHN_LOGIN=admin'] }
   action :nothing
 end
