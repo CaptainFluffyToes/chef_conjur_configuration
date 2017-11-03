@@ -42,7 +42,7 @@ docker_container 'conjur' do
   network_mode "#{conjur_network}"
   repo 'cyberark/conjur'
   command 'server'
-  port '3000:3000'
+  port ['3000:3000', '443:443', '80:80']
   env lazy { ['DATABASE_URL=postgres://postgres@database/postgres', "CONJUR_DATA_KEY=#{node['conjur']['data_key']}"] }
   notifies :run, 'ruby_block[sleep]', :immediate
   action :nothing
@@ -79,5 +79,15 @@ docker_container 'cli' do
   command 'infinity'
   entrypoint 'sleep'
   env lazy { ["CONJUR_APPLIANCE_URL=http://#{conjur_name}", "CONJUR_ACCOUNT=#{account_name}", "CONJUR_AUTHN_API_KEY=#{node['conjur']['account_api']}", 'CONJUR_AUTHN_LOGIN=admin'] }
+  notifies :run, 'ruby_block[setup_cli]', :immediate
   action :nothing
+end
+
+ruby_block 'setup_cli' do
+  block do
+    `docker exec conjur-cli rm -f /root/.conjurrc`
+    `docker exec conjur-cli conjur init -u #{conjur_name} -a #{account_name}`
+    `docker exec conjur-cli conjur authn login -u admin`
+  end
+  action :run
 end
