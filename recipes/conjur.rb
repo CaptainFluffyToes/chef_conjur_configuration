@@ -89,5 +89,5 @@ ruby_block 'setup_cli' do
     `docker exec conjur-cli conjur init -u #{conjur_name} -a #{account_name}`
     `docker exec conjur-cli conjur authn login -u admin`
   end
-  action :run
+  action :nothing
 end
