@@ -19,3 +19,4 @@
 
 include_recipe 'docker_configuration::default'
 include_recipe 'conjur_configuration::conjur'
+include_recipe 'conjur_configuration::policy_load'
