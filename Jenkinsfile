@@ -2,16 +2,27 @@ pipeline {
     agent any
     
     stages {
+        stage ('Copy Chef configuration files to directory') {
+            steps {
+                sh 'cp -R /chef .chef'
+            }
+        }
         stage ('Install Berks files') {
-            sh 'berks install'
+            steps {
+                sh 'berks install'
+            }
         }
 
         stage ('Update Berks files') {
-            sh 'berks update'
+            steps {
+                sh 'berks update'
+            }
         }
 
         stage ('Upload cookbook to chef server') {
-            sh 'berks upload'
+            steps {
+                sh 'berks upload'
+            }
         }
     }
 }
