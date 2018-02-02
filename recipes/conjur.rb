@@ -58,7 +58,7 @@ end
 
 ruby_block 'Generate_API_Key' do
   block do
-    node.default['conjur']['account_api'] = `docker exec #{conjur_name} conjurctl account create #{account_name} | awk '/admin:/{print $5}'`
+    node.default['conjur']['account_api'] = `docker exec #{conjur_name} conjurctl account create #{account_name} | awk '/admin:/{print $5}' | tr -d '\r\n'`
   end
   notifies :run, 'ruby_block[sleep_key]', :immediate
   action :nothing
