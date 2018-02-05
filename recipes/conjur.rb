@@ -6,7 +6,7 @@
 
 conjur_network = 'pipeline'
 conjur_name = 'conjur-master'
-account_name = 'ConUser'
+account_name = 'solsys'
 
 images = ['cyberark/conjur', 'postgres', 'conjurinc/cli5']
 
